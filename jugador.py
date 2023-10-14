@@ -1,85 +1,89 @@
 from utils import validar_celda,validar_celda_contigua
-def crear_equipo():
-    print('vamos a posicionar a nuestors personajes en el tablero!')
-    equipo = []
-    while True:
-        try:
-            Medico = Medicos()
-            pos_medico = input('Indica la celda (A-D, 1-4. p.ej: B2) en la que posicionar al Medico: ')
-            pos_medico = pos_medico.upper()
-            if validar_celda(pos_medico, 'D',4):
-                Medico.set_posicion(pos_medico)
-                equipo.append(Medico)
-            else:
-                raise ValueError
-            break
 
-        except ValueError:
-            print('Ups... valor de celda incorrecto.')
-        except:
-            print('Ups... valor de celda incorrecto.')
-    while True:
-        try:
-            Artillero = Artilleros()
-            pos_artillero = input('Indica la celda (A-D, 1-4. p.ej: B2) en la que posicionar al Artillero: ')
-            pos_artillero = pos_artillero.upper()
-            if validar_celda(pos_artillero, 'D', 4):
-                Artillero.set_posicion(pos_artillero)
-                equipo.append(Artillero)
-            else:
-                raise ValueError
-            if pos_artillero == pos_medico:
-                raise IndexError
-            break
-        except IndexError:
-            print('Ups... la celda seleccionada esta ya ocupada')
-        except ValueError:
-            print('Ups... valor de celda incorrecto.')
-        except:
-            print('Ups... valor de celda incorrecto.')
-    while True:
-        try:
-            Francotirador = Francotiradores()
-            pos_francotirador = input('Indica la celda (A-D, 1-4. p.ej: B2) en la que posicionar al Francotirador: ')
-            pos_francotirador = pos_francotirador.upper()
-            if validar_celda(pos_francotirador, 'D', 4):
-                Francotirador.set_posicion(pos_francotirador)
-                equipo.append(Francotirador)
-            else:
-                raise ValueError
-            if pos_francotirador == pos_medico or pos_francotirador == pos_artillero:
-                raise IndexError
-            break
-        except IndexError:
-            print('Ups... la celda seleccionada esta ya ocupada')
-        except ValueError:
-            print('Ups... valor de celda incorrecto.')
-        except:
-            print('Ups... valor de celda incorrecto.')
-    while True:
-        try:
-            Inteligencia = Inteligencias()
-            pos_inteligencia = input('Indica la celda (A-D, 1-4. p.ej: B2) en la que posicionar al Inteligencia: ')
-            pos_inteligencia = pos_inteligencia.upper()
-            if validar_celda(pos_inteligencia, 'D', 4):
-                Inteligencia.set_posicion(pos_inteligencia)
-                equipo.append(Inteligencia)
-            else:
-                raise ValueError
-            if pos_inteligencia == pos_medico or pos_inteligencia == pos_artillero or pos_inteligencia == pos_francotirador:
-                raise IndexError
-            break
-        except IndexError:
-            print('Ups... la celda seleccionada esta ya ocupada')
-        except ValueError:
-            print('Ups... valor de celda incorrecto.')
-        except:
-            print('Ups... valor de celda incorrecto.')
-    return equipo
 class Jugador:
+    def crear_equipo(self):
+        print('vamos a posicionar a nuestors personajes en el tablero!')
+        equipo = []
+
+        while True:
+            try:
+                Medico = Medicos()
+                pos_medico = input('Indica la celda (A-D, 1-4. p.ej: B2) en la que posicionar al Medico: ')
+                pos_medico = pos_medico.upper()
+                if validar_celda(pos_medico, 'D', 4):
+                    Medico.set_posicion(pos_medico)
+                    equipo.append(Medico)
+                else:
+                    raise ValueError
+                break
+
+            except ValueError:
+                print('Ups... valor de celda incorrecto.')
+            except:
+                print('Ups... valor de celda incorrecto.')
+
+        while True:
+            try:
+                Artillero = Artilleros()
+                pos_artillero = input('Indica la celda (A-D, 1-4. p.ej: B2) en la que posicionar al Artillero: ')
+                pos_artillero = pos_artillero.upper()
+                if validar_celda(pos_artillero, 'D', 4):
+                    Artillero.set_posicion(pos_artillero)
+                    equipo.append(Artillero)
+                else:
+                    raise ValueError
+                if pos_artillero == pos_medico:
+                    raise IndexError
+                break
+            except IndexError:
+                print('Ups... la celda seleccionada esta ya ocupada')
+            except ValueError:
+                print('Ups... valor de celda incorrecto.')
+            except:
+                print('Ups... valor de celda incorrecto.')
+        while True:
+            try:
+                Francotirador = Francotiradores()
+                pos_francotirador = input(
+                    'Indica la celda (A-D, 1-4. p.ej: B2) en la que posicionar al Francotirador: ')
+                pos_francotirador = pos_francotirador.upper()
+                if validar_celda(pos_francotirador, 'D', 4):
+                    Francotirador.set_posicion(pos_francotirador)
+                    equipo.append(Francotirador)
+                else:
+                    raise ValueError
+                if pos_francotirador == pos_medico or pos_francotirador == pos_artillero:
+                    raise IndexError
+                break
+            except IndexError:
+                print('Ups... la celda seleccionada esta ya ocupada')
+            except ValueError:
+                print('Ups... valor de celda incorrecto.')
+            except:
+                print('Ups... valor de celda incorrecto.')
+        while True:
+            try:
+                Inteligencia = Inteligencias()
+                pos_inteligencia = input('Indica la celda (A-D, 1-4. p.ej: B2) en la que posicionar al Inteligencia: ')
+                pos_inteligencia = pos_inteligencia.upper()
+                if validar_celda(pos_inteligencia, 'D', 4):
+                    Inteligencia.set_posicion(pos_inteligencia)
+                    equipo.append(Inteligencia)
+                else:
+                    raise ValueError
+                if pos_inteligencia == pos_medico or pos_inteligencia == pos_artillero or pos_inteligencia == pos_francotirador:
+                    raise IndexError
+                break
+            except IndexError:
+                print('Ups... la celda seleccionada esta ya ocupada')
+            except ValueError:
+                print('Ups... valor de celda incorrecto.')
+            except:
+                print('Ups... valor de celda incorrecto.')
+        return equipo
     def __init__(self):
-        self.oponente = 'jugador'
-        self.equipo = []
+        self.oponente = str()
+        self.equipo = self.crear_equipo()
         self.informe = str()
     def set_oponente(self, oponente):
         self.oponente = oponente
@@ -87,11 +91,6 @@ class Jugador:
         self.equipo = equipo
     def set_informe(self,informe):
         self.informe = informe
-
-'''
-    set_equipo(equipo)
-Jugador.set_equipo(equipo)
-'''
 
 class Personaje:
 
@@ -171,4 +170,5 @@ class Inteligencias(Personaje):
         self.vida_actual = 2
         self.danyo = 0
         self.enfriamiento_restante = 0
-crear_equipo()
+
+

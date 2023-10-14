@@ -1,3 +1,4 @@
+
 def limpiar_terminal():
     print(chr(27) + "[2J")
 def validar_celda(celda, max_col, max_row):
