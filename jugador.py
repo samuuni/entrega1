@@ -14,10 +14,10 @@ class Jugador:
                     Medico.set_posicion(pos_medico)
                     equipo.append(Medico)
                 else:
-                    raise ValueError
+                    raise CasillaInvalidaError
                 break
 
-            except ValueError:
+            except CasillaInvalidaError:
                 print('Ups... valor de celda incorrecto.')
             except:
                 print('Ups... valor de celda incorrecto.')
@@ -31,13 +31,13 @@ class Jugador:
                     Artillero.set_posicion(pos_artillero)
                     equipo.append(Artillero)
                 else:
-                    raise ValueError
+                    raise CasillaInvalidaError
                 if pos_artillero == pos_medico:
-                    raise IndexError
+                    raise CasillaOcupadaError
                 break
-            except IndexError:
+            except CasillaOcupadaError:
                 print('Ups... la celda seleccionada esta ya ocupada')
-            except ValueError:
+            except CasillaInvalidaError:
                 print('Ups... valor de celda incorrecto.')
             except:
                 print('Ups... valor de celda incorrecto.')
@@ -51,13 +51,13 @@ class Jugador:
                     Francotirador.set_posicion(pos_francotirador)
                     equipo.append(Francotirador)
                 else:
-                    raise ValueError
+                    raise CasillaInvalidaError
                 if pos_francotirador == pos_medico or pos_francotirador == pos_artillero:
-                    raise IndexError
+                    raise CasillaOcupadaError
                 break
-            except IndexError:
+            except CasillaOcupadaError:
                 print('Ups... la celda seleccionada esta ya ocupada')
-            except ValueError:
+            except CasillaInvalidaError:
                 print('Ups... valor de celda incorrecto.')
             except:
                 print('Ups... valor de celda incorrecto.')
@@ -70,13 +70,13 @@ class Jugador:
                     Inteligencia.set_posicion(pos_inteligencia)
                     equipo.append(Inteligencia)
                 else:
-                    raise ValueError
+                    raise CasillaInvalidaError
                 if pos_inteligencia == pos_medico or pos_inteligencia == pos_artillero or pos_inteligencia == pos_francotirador:
-                    raise IndexError
+                    raise CasillaOcupadaError
                 break
-            except IndexError:
+            except CasillaOcupadaError:
                 print('Ups... la celda seleccionada esta ya ocupada')
-            except ValueError:
+            except CasillaInvalidaError:
                 print('Ups... valor de celda incorrecto.')
             except:
                 print('Ups... valor de celda incorrecto.')
@@ -171,4 +171,10 @@ class Inteligencias(Personaje):
         self.danyo = 0
         self.enfriamiento_restante = 0
 
+#=================================================================================================
+#aqui estan unas clases para errores custom para que sea mas comodo en los try y no usar errores de python que no vengan al caso
+class CasillaInvalidaError(Exception):
+    pass
+class CasillaOcupadaError(Exception):
+    pass
 
