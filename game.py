@@ -1,5 +1,21 @@
-from utils import limpiar_terminal
-from jugador import Jugador
+from utils import limpiar_terminal , validar_celda , validar_celda_contigua
+from jugador import Jugador, Personaje
+
+def turno():
+
+    return
+def crear_equipo():
+
+
+
+
+    return
+
+'''
+def set_oponente(jugador):
+    return Jugador.oponente(jugador)
+'''
+
 def main():
     print('Bienvenidos a Tactical Battle. A jugar!\n')
     input('Turno del Jugador 1. Pulsa intro para comenzar')
@@ -9,6 +25,7 @@ def main():
     input('Turno del Jugador 2. Pulsa intro para comenzar')
     j2 = Jugador()
     input('Jugador 2, pulsa terminar tu turno')
+
     limpiar_terminal()
     j1.set_oponente(j2)
     j2.set_oponente(j1)
@@ -28,5 +45,6 @@ def main():
         return 0
     input('Jugador 2, pulsa intro para terminar tu turno')
     limpiar_terminal()
+
 if __name__ == '__main__':
-main()
+    main()
