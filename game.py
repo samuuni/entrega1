@@ -1,13 +1,6 @@
 from utils import limpiar_terminal , validar_celda , validar_celda_contigua
 from jugador import Jugador, Personaje
 
-
-def turno():
-
-    return
-
-
-
 def main():
     print('Bienvenidos a Tactical Battle. A jugar!\n')
     input('Turno del Jugador 1. Pulsa intro para comenzar')

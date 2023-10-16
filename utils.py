@@ -2,11 +2,14 @@
 def limpiar_terminal():
     print(chr(27) + "[2J")
 def validar_celda(celda, max_col, max_row):
+    tamano = len(celda)
+    if len(celda) > 2:
+        return  False
     columnas = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     columnas = list(columnas)
     limit = columnas.index(max_col)+1
     columnas_max = columnas[:limit]
-    if celda[0] in columnas_max and int(celda[1]) <= max_row:
+    if celda[0] in columnas_max and 0 < int(celda[1]) <= max_row:
         verif = True
     else:
         verif = False
@@ -34,3 +37,9 @@ def validar_celda_contigua(celda1, celda2) :
         else:
             return False
 # Para comprobar si la celda 1 es contigua a la celda 2
+def columnas(): #esto es para si hay que cambiar la cantidad de filas o columnas sea mas facil
+    col = 'D'
+    return col
+def filas():
+    fil = 4
+    return fil

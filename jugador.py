@@ -1,17 +1,61 @@
-from utils import validar_celda,validar_celda_contigua
+from utils import validar_celda,filas, columnas, validar_celda_contigua
 
 class Jugador:
-    def crear_equipo(self):
+
+
+    def turno(self):
+        #meter un while true con try para realizar accion por si ponen algo diferente a 1-6
+        return
+    def realizar_accion(self): #orden [medico, artillero, francotirador, inteligencia]
+        equipo_restante = self.get_equipo()
+        nombres = ['Medico','Artillero', 'Francotirador','Inteligencia']
+        '''
+        medico = equipo_restante[0]
+        artillero = equipo_restante[1]
+        francotirador = equipo_restante[2]
+        inteligencia = equipo_restante[3]
+        '''
+        print('---- SITUACION DEL EQUIPO ----')
+        per_vivos = 0
+        for personaje in range(len(equipo_restante)):
+            if equipo_restante[personaje].get_vida_actual() > 0 :
+                print(f'{nombres[personaje]} está en {equipo_restante[personaje].get_posicion()} '
+                      f'[Vida {equipo_restante[personaje].get_vida_actual()}/{equipo_restante[personaje].get_vida_max()}]')
+                per_vivos += 1
+            elif equipo_restante[personaje].get_vida_actual() == 0:
+                del equipo_restante[personaje]
+                del nombres[personaje]
+        for opciones in range(per_vivos): #hay que ver como coño hacer el menu y eso
+
+
+
+
+
+    def crear_equipo(self,personaje,celda):
+        if personaje == 'Medico':
+            personaje = Medicos()
+            personaje.set_posicion(celda)
+        elif personaje == 'Artillero':
+            personaje = Artilleros()
+            personaje.set_posicion(celda)
+        elif personaje == 'Francotirador':
+            personaje = Francotiradores()
+            personaje.set_posicion(celda)
+        elif personaje == 'Inteligencia':
+            personaje = Inteligencias()
+            personaje.set_posicion(celda)
+        return personaje
+    def posicionar_equipo(self):
         print('vamos a posicionar a nuestors personajes en el tablero!')
         equipo = []
 
         while True:
             try:
-                Medico = Medicos()
+
                 pos_medico = input('Indica la celda (A-D, 1-4. p.ej: B2) en la que posicionar al Medico: ')
                 pos_medico = pos_medico.upper()
-                if validar_celda(pos_medico, 'D', 4):
-                    Medico.set_posicion(pos_medico)
+                if validar_celda(pos_medico, columnas(), filas()):
+                    Medico = self.crear_equipo('Medico', pos_medico)
                     equipo.append(Medico)
                 else:
                     raise CasillaInvalidaError
@@ -24,11 +68,10 @@ class Jugador:
 
         while True:
             try:
-                Artillero = Artilleros()
                 pos_artillero = input('Indica la celda (A-D, 1-4. p.ej: B2) en la que posicionar al Artillero: ')
                 pos_artillero = pos_artillero.upper()
-                if validar_celda(pos_artillero, 'D', 4):
-                    Artillero.set_posicion(pos_artillero)
+                if validar_celda(pos_artillero, columnas(), filas()):
+                    Artillero = self.crear_equipo('Artillero',pos_artillero)
                     equipo.append(Artillero)
                 else:
                     raise CasillaInvalidaError
@@ -43,12 +86,10 @@ class Jugador:
                 print('Ups... valor de celda incorrecto.')
         while True:
             try:
-                Francotirador = Francotiradores()
-                pos_francotirador = input(
-                    'Indica la celda (A-D, 1-4. p.ej: B2) en la que posicionar al Francotirador: ')
+                pos_francotirador = input('Indica la celda (A-D, 1-4. p.ej: B2) en la que posicionar al Francotirador: ')
                 pos_francotirador = pos_francotirador.upper()
-                if validar_celda(pos_francotirador, 'D', 4):
-                    Francotirador.set_posicion(pos_francotirador)
+                if validar_celda(pos_francotirador, columnas(), filas()):
+                    Francotirador = self.crear_equipo('Francotirador',pos_francotirador)
                     equipo.append(Francotirador)
                 else:
                     raise CasillaInvalidaError
@@ -63,11 +104,10 @@ class Jugador:
                 print('Ups... valor de celda incorrecto.')
         while True:
             try:
-                Inteligencia = Inteligencias()
                 pos_inteligencia = input('Indica la celda (A-D, 1-4. p.ej: B2) en la que posicionar al Inteligencia: ')
                 pos_inteligencia = pos_inteligencia.upper()
-                if validar_celda(pos_inteligencia, 'D', 4):
-                    Inteligencia.set_posicion(pos_inteligencia)
+                if validar_celda(pos_inteligencia,  columnas(), filas()):
+                    Inteligencia = self.crear_equipo('Inteligencia',pos_inteligencia)
                     equipo.append(Inteligencia)
                 else:
                     raise CasillaInvalidaError
@@ -80,10 +120,16 @@ class Jugador:
                 print('Ups... valor de celda incorrecto.')
             except:
                 print('Ups... valor de celda incorrecto.')
+        for personaje in range(len(equipo)):
+            equipo2 = []
+            equipo2.extend(equipo)
+            del equipo2[personaje]
+            equipo[personaje].set_equipo(equipo2[0],equipo2[1],equipo2[2])
+
         return equipo
     def __init__(self):
         self.oponente = str()
-        self.equipo = self.crear_equipo()
+        self.equipo = self.posicionar_equipo()
         self.informe = str()
     def set_oponente(self, oponente):
         self.oponente = oponente
@@ -91,6 +137,8 @@ class Jugador:
         self.equipo = equipo
     def set_informe(self,informe):
         self.informe = informe
+    def get_equipo(self):
+        return self.equipo
 
 class Personaje:
 
@@ -107,12 +155,16 @@ class Personaje:
         self.posicion = posicion
     def set_enfriamiento(self,enfriamiento):
         self.enfriamiento_restante = enfriamiento
+    def set_equipo(self,personaje1,personaje2,personaje3):
+        self.equipo = [personaje1,personaje2,personaje3]
     def get_vida_max(self):
         return self.vida_maxima()
     def get_posicion(self):
         return self.get_posicion()
     def get_enfriamiento(self):
-        return self.enfriamiento_restante
+        return self.enfriamiento_restante()
+    def get_vida_actual(self):
+        return self.vida_actual()
 class Medicos(Personaje):
     def __init__(self):
         super().__init__()
