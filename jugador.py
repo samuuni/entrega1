@@ -4,32 +4,106 @@ class Jugador:
 
 
     def turno(self):
-        #meter un while true con try para realizar accion por si ponen algo diferente a 1-6
+        self.realizar_accion()
+        #meter un while true con try para realizar accion por si ponen algo diferente
         return
     def realizar_accion(self): #orden [medico, artillero, francotirador, inteligencia]
         equipo_restante = self.get_equipo()
         nombres = ['Medico','Artillero', 'Francotirador','Inteligencia']
-        '''
-        medico = equipo_restante[0]
-        artillero = equipo_restante[1]
-        francotirador = equipo_restante[2]
-        inteligencia = equipo_restante[3]
-        '''
         print('---- SITUACION DEL EQUIPO ----')
-        per_vivos = 0
         for personaje in range(len(equipo_restante)):
             if equipo_restante[personaje].get_vida_actual() > 0 :
                 print(f'{nombres[personaje]} está en {equipo_restante[personaje].get_posicion()} '
                       f'[Vida {equipo_restante[personaje].get_vida_actual()}/{equipo_restante[personaje].get_vida_max()}]')
-                per_vivos += 1
             elif equipo_restante[personaje].get_vida_actual() == 0:
                 del equipo_restante[personaje]
                 del nombres[personaje]
-        for opciones in range(per_vivos): #hay que ver como coño hacer el menu y eso
+        op_num = 1
+        menu = []
+        for opciones in range(len(equipo_restante)):
+            print(f'{op_num}: Mover ({equipo_restante[opciones].get_nombre()})')
+            menu.append({op_num: f'M{equipo_restante[opciones].get_codigo()}'})
+            if equipo_restante[opciones].get_nombre() == 'Medico':
+                heridos = 0
+                for herido in equipo_restante:
+                    if herido.get_vida_actual() < herido.get_vida_max():
+                        heridos += 1
+                if heridos > 0:
+                    op_num += 1
+                    print(f'{op_num}: {equipo_restante[opciones].get_habilidad()} ({equipo_restante[opciones].get_nombre()})')
+                    menu.append({op_num : f'H{equipo_restante[opciones].get_codigo()}'})
+                else:
+                    op_num += 1
+            else:
+                op_num += 1
+                print(f'{op_num}: {equipo_restante[opciones].get_codigo()}. ({equipo_restante[opciones].get_nombre()})')
+                menu.append({op_num :  f'H{equipo_restante[opciones].get_codigo()}'})
+                if opciones == len(equipo_restante)-1:
+                    op_num = op_num
+                else:
+                    op_num += 1
+        while True:
+            try:
+                eleccion = int(input('Seleccione la acción para este turno: '))
+                if 1<=eleccion<=op_num:
+                    break
+                else:
+                    raise OpcionInvalidadError
+            except OpcionInvalidadError:
+                print(f'Opción inválida, seleccione una opción 1-{op_num}')
+            except:
+                print(f'Opción inválida, seleccione una opción 1-{op_num}')
+        for indx in menu:
+            if indx == eleccion:
+                resultado = menu[indx]
+        if resultado[0] == 'M':
+            cod = resultado[1]
+            if cod == 'M':
+                medico = self.get_equipo()[0]
+                while True:
+                    celda = input(f'Indica la celda a la que mover al Médico (Posicion actual: {medico.get_posicion()}): ')
+                    mover = medico.mover(celda)
+                    if mover:
+                        break
+                    else:
+                        print(mover)
+            elif cod == 'A':
+                artillero = self.get_equipo()[1]
+                while True:
+                    celda = input(
+                        f'Indica la celda a la que mover al Médico (Posicion actual: {artillero.get_posicion()}): ')
+                    mover = artillero.mover(celda)
+                    if mover:
+                        break
+                    else:
+                        print(mover)
+            elif cod == 'F':
+                francotirador = self.get_equipo()[2]
+                while True:
+                    celda = input(
+                        f'Indica la celda a la que mover al Médico (Posicion actual: {francotirador.get_posicion()}): ')
+                    mover = francotirador.mover(celda)
+                    if mover:
+                        break
+                    else:
+                        print(mover)
+            elif cod == 'I':
+                inteligencia = self.get_equipo()[3]
+                while True:
+                    celda = input(
+                        f'Indica la celda a la que mover al Médico (Posicion actual: {inteligencia.get_posicion()}): ')
+                    mover = inteligencia.mover(celda)
+                    if mover:
+                        break
+                    else:
+                        print(mover)
+        elif resultado[0] == 'H':
+            cod = resultado[1]
 
 
 
 
+        return eleccion
 
     def crear_equipo(self,personaje,celda):
         if personaje == 'Medico':
@@ -141,7 +215,19 @@ class Jugador:
         return self.equipo
 
 class Personaje:
-
+    def mover(self, celda):
+        if validar_celda(celda, columnas(),filas()):
+            if validar_celda_contigua(celda,self.get_posicion()):
+                for equipo in self.get_equipo():
+                    if celda == equipo.get_posicion():
+                        return f'La celda esta ocupada por {equipo.get_nombre()}'
+                self.set_posicion(celda)
+                return True
+            else:
+                return 'La celda no es contiga'
+        else:
+            return 'La celda no es válida'
+    def habilidad(self):
     def __init__(self):
         self.vida_maxima = int()
         self.vida_actual = int()
@@ -149,6 +235,9 @@ class Personaje:
         self.posicion = str()
         self.enfriamiento_restante = int()
         self.equipo = list()
+        self.nombre = str()
+        self.habilidad_menu = str()
+        self.codigo = str()
     def set_vida_actual(self,vida_actual):
         self.vida_actual = vida_actual
     def set_posicion(self,posicion):
@@ -158,13 +247,21 @@ class Personaje:
     def set_equipo(self,personaje1,personaje2,personaje3):
         self.equipo = [personaje1,personaje2,personaje3]
     def get_vida_max(self):
-        return self.vida_maxima()
+        return self.vida_maxima
     def get_posicion(self):
-        return self.get_posicion()
+        return self.posicion
     def get_enfriamiento(self):
-        return self.enfriamiento_restante()
+        return self.enfriamiento_restante
     def get_vida_actual(self):
-        return self.vida_actual()
+        return self.vida_actual
+    def get_nombre(self):
+        return self.nombre
+    def get_habilidad(self):
+        return self.habilidad_menu
+    def get_codigo(self):
+        return  self.codigo
+    def get_equipo(self):
+        return self.equipo
 class Medicos(Personaje):
     def __init__(self):
         super().__init__()
@@ -172,6 +269,9 @@ class Medicos(Personaje):
         self.vida_actual = 1
         self.danyo = 0
         self.enfriamiento_restante = 0
+        self.nombre = 'Medico'
+        self.habilidad_menu = 'Curar a un compañero'
+        self.codigo = 'M'
     def curar(self,objetivo):
         if self.get_enfriamiento() == 0:
             objetivo.set_vida_actual(objetivo.get_vidamax())
@@ -185,6 +285,9 @@ class Artilleros(Personaje):
         self.vida_actual = 2
         self.danyo = 1
         self.enfriamiento_restante = 0
+        self.nombre = 'Artillero'
+        self.habilidad_menu = 'Disparar en área (2x2). Daño 1'
+        self.codigo = 'A'
     def disparar(self,objetivo):
 
         if self.get_enfriamiento() == 0:
@@ -214,6 +317,9 @@ class Francotiradores(Personaje):
         self.vida_actual = 3
         self.danyo = 3
         self.enfriamiento_restante = 0
+        self.nombre = 'Francotirador'
+        self.habilidad_menu = 'Disparar a una celda. Daño 3'
+        self.codigo = 'F'
     #def eliminar(self,objetivo):
 class Inteligencias(Personaje):
     def __init__(self):
@@ -222,11 +328,18 @@ class Inteligencias(Personaje):
         self.vida_actual = 2
         self.danyo = 0
         self.enfriamiento_restante = 0
+        self.nombre = 'Inteligencia'
+        self.habilidad_menu = 'Revelar a los enemigos en un área 2x2'
+        self.codigo = 'I'
 
 #=================================================================================================
 #aqui estan unas clases para errores custom para que sea mas comodo en los try y no usar errores de python que no vengan al caso
 class CasillaInvalidaError(Exception):
     pass
 class CasillaOcupadaError(Exception):
+    pass
+class CasillaNoContiguaError(Exception):
+    pass
+class OpcionInvalidadError(Exception):
     pass
 
