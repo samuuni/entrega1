@@ -20,6 +20,7 @@ class Jugador:
                 del nombres[personaje]
         op_num = 1
         menu = []
+
         for opciones in range(len(equipo_restante)):
             print(f'{op_num}: Mover ({equipo_restante[opciones].get_nombre()})')
             menu.append({op_num: f'M{equipo_restante[opciones].get_codigo()}'})
