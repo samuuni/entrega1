@@ -8,12 +8,12 @@ def main():
     input('Jugador 1, pulsa terminar tu turno')
     limpiar_terminal()
     input('Turno del Jugador 2. Pulsa intro para comenzar')
-    j2 = Jugador()
+#    j2 = Jugador()
     input('Jugador 2, pulsa terminar tu turno')
 
     limpiar_terminal()
-    j1.set_oponente(j2)
-    j2.set_oponente(j1)
+#    j1.set_oponente(j2)
+#    j2.set_oponente(j1)
     final = False
     while not final:
         input('Turno del Jugador 1. Pulsa intro para comenzar')
