@@ -36,6 +36,21 @@ def validar_celda_contigua(celda1, celda2) :
         else:
             return False
 # Para comprobar si la celda 1 es contigua a la celda 2
+def area_2x2(objetivo): #para artillero e inteligencia
+    colum = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    colum = list(colum)
+    derecha = objetivo[0] + str(int(objetivo[1]) + 1)
+    abajo = colum[colum.index(objetivo[0]) + 1] + objetivo[1]
+    esquina = colum[colum.index(objetivo[0]) + 1] + str(int(objetivo[1]) + 1)
+    if validar_celda(esquina, columnas(), filas()):
+        area = [objetivo, derecha, abajo, esquina]
+    elif validar_celda(derecha, columnas(), filas()) and not validar_celda(abajo, columnas(), filas()):
+        area = [objetivo, derecha]
+    elif not validar_celda(derecha, columnas(), filas()) and validar_celda(abajo, columnas(), filas()):
+        area = [objetivo, abajo]
+    else:
+        area = [objetivo]
+    return area
 def columnas(): #esto es para si hay que cambiar la cantidad de filas o columnas sea mas facil
     col = 'D'
     return col
