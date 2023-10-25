@@ -18,18 +18,18 @@ def main():
     while not final:
         input('Turno del Jugador 1. Pulsa intro para comenzar')
         final = j1.turno()
-    if final:
-        print("***** El jugador 1 ha ganado la partida! *****")
-        return 0
-    input('Jugador 1, pulsa intro para terminar tu turno')
-    limpiar_terminal()
-    input('Turno del Jugador 2. Pulsa intro para comenzar')
-    final = j2.turno()
-    if final:
-        print("***** El jugador 2 ha ganado la partida! *****")
-        return 0
-    input('Jugador 2, pulsa intro para terminar tu turno')
-    limpiar_terminal()
+        if final:
+            print("***** El jugador 1 ha ganado la partida! *****")
+            return 0
+        input('Jugador 1, pulsa intro para terminar tu turno')
+        limpiar_terminal()
+        input('Turno del Jugador 2. Pulsa intro para comenzar')
+        final = j2.turno()
+        if final:
+            print("***** El jugador 2 ha ganado la partida! *****")
+            return 0
+        input('Jugador 2, pulsa intro para terminar tu turno')
+        limpiar_terminal()
 
 if __name__ == '__main__':
     main()

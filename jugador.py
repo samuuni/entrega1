@@ -22,14 +22,16 @@ class Jugador:
             terminado = False
         return terminado
     def realizar_accion(self): #orden [medico, artillero, francotirador, inteligencia]
-        equipo_restante = self.get_equipo()
+        equipo_actual = self.get_equipo()
+        equipo_restante = []
+        equipo_restante.extend(equipo_actual)
         nombres = ['Medico','Artillero', 'Francotirador','Inteligencia']
         print('---- SITUACION DEL EQUIPO ----')
-        for personaje in range(len(equipo_restante)):
-            if equipo_restante[personaje].get_vida_actual() > 0 :
-                print(f'{nombres[personaje]} está en {equipo_restante[personaje].get_posicion()} '
-                      f'[Vida {equipo_restante[personaje].get_vida_actual()}/{equipo_restante[personaje].get_vida_max()}]')
-            elif equipo_restante[personaje].get_vida_actual() == 0:
+        for personaje in range(len(equipo_actual)): #Aqui hay un index error
+            if equipo_actual[personaje].get_vida_actual() > 0 :
+                print(f'{nombres[personaje]} está en {equipo_actual[personaje].get_posicion()} '
+                      f'[Vida {equipo_actual[personaje].get_vida_actual()}/{equipo_actual[personaje].get_vida_max()}]')
+            elif equipo_actual[personaje].get_vida_actual() == 0:
                 del equipo_restante[personaje]
                 del nombres[personaje]
         op_num = 1
@@ -197,7 +199,7 @@ class Jugador:
                                     if aliado.get_enfriamiento() == 1:
                                         aliado.set_enfriamiento(0)
                                 cod_out = None
-                                break
+                                return cod_out
                             else:
                                 raise HabilidadEnfriamientoError
                         elif cod == 'A':
@@ -207,9 +209,10 @@ class Jugador:
                                     try:
                                         celda = input(
                                             'Indica las coordenadas de la esquina superior izquierda en la que disparar (área 2x2): ')
-                                        celda.upper()
-                                        valido = area_2x2(celda)
+                                        celda = celda.upper()
+                                        valido = validar_celda(celda,columnas(),filas())
                                         if valido:
+
                                             break
                                         else:
                                             raise CasillaInvalidaError
@@ -222,7 +225,7 @@ class Jugador:
                                     if aliado.get_enfriamiento() == 1:
                                         aliado.set_enfriamiento(0)
                                 cod_out = f'A{celda}'
-                                break
+                                return cod_out
                             else:
                                 raise HabilidadEnfriamientoError
                         elif cod == 'F':
@@ -232,8 +235,8 @@ class Jugador:
                                     try:
                                         celda = input(
                                             'Indica las coordenadas de la celda a la que disparar: ')
-                                        celda.upper()
-                                        valido = validar_celda(celda)
+                                        celda = celda.upper()
+                                        valido = validar_celda(celda,columnas(),filas())
                                         if valido:
                                             break
                                         else:
@@ -247,7 +250,7 @@ class Jugador:
                                     if aliado.get_enfriamiento() == 1:
                                         aliado.set_enfriamiento(0)
                                 cod_out = f'F{celda}'
-                                break
+                                return cod_out
                             else:
                                 raise HabilidadEnfriamientoError
                         elif cod == 'I':
@@ -257,8 +260,8 @@ class Jugador:
                                     try:
                                         celda = input(
                                             'Indica las coordenadas de la esquina superior izquierda de la zona de observación (área 2x2): ')
-                                        celda.upper()
-                                        valido = area_2x2(celda)
+                                        celda = celda.upper()
+                                        valido = validar_celda(celda,columnas(),filas())
                                         if valido:
                                             break
                                         else:
@@ -272,11 +275,10 @@ class Jugador:
                                     if aliado.get_enfriamiento() == 1:
                                         aliado.set_enfriamiento(0)
                                 cod_out = f'I{celda}'
-                                break
+                                return cod_out
                             else:
                                 raise HabilidadEnfriamientoError
 
-                    return cod_out
                 else:
                     raise OpcionInvalidadError
 
@@ -289,7 +291,7 @@ class Jugador:
     def recibir_accion(self,codigo): #esto despues en turno habra que llamarla como oponente.recibir_accion(codigo)
         equipo = self.get_equipo()
         cod = codigo[0]
-        celda = codigo.replace(codigo[0],'')
+        celda = codigo[1]+codigo[2]
         accion = ''
 
         if cod == 'A':
@@ -297,7 +299,7 @@ class Jugador:
             habilidad = artillero.habilidad(celda, equipo)
             if habilidad:
                 for enemigo in habilidad:
-                    accion += f'{enemigo.get_nombre()} ha sido herido en {celda} [Vida restante: {enemigo.get_vida_actual}]\n'
+                    accion += f'{enemigo.get_nombre()} ha sido herido en {celda} [Vida restante: {enemigo.get_vida_actual()}]\n'
         elif cod == 'F':
             francotirador = self.get_equipo()[2]
             habilidad = francotirador.habilidad(celda, equipo)
@@ -310,6 +312,7 @@ class Jugador:
             if habilidad:
                 for enemigo in habilidad:
                     accion += f'{enemigo.get_nombre()} ha sido avistado en {celda}\n'
+        self.set_informe(accion)
         if accion != '':
             muertos = 0
             for aliado in equipo:
@@ -321,9 +324,6 @@ class Jugador:
                 return {'resultado': accion, 'terminar': 'No'}
         else:
             return None
-    def informe(self,informe): #aqui que lo reciba de recibir accion
-        self.informe = informe
-        return self.informe
     def crear_equipo(self,personaje,celda):
         if personaje == 'Medico':
             personaje = Medicos()
@@ -434,6 +434,10 @@ class Jugador:
         return self.equipo
     def get_oponente(self):
         return self.oponente
+    def set_informe(self,informe): #aqui que lo reciba de recibir accion
+        self.informe = informe
+    def get_informe(self):
+        return self.informe
 
 class Personaje:
     def mover(self, celda):
@@ -512,8 +516,7 @@ class Artilleros(Personaje):
         area = area_2x2(objetivo)
         enemigos = []
         hecho = False
-        oponentes = oponente.get_equipo()
-        for enemigo in oponentes:
+        for enemigo in oponente:
             if enemigo.get_posicion() in area:
                 enemigos.append(enemigo)
                 vida = enemigo.get_vida_actual()
@@ -536,8 +539,7 @@ class Francotiradores(Personaje):
         self.codigo = 'F'
     def habilidad(self,objetivo,oponente):
         hecho = False
-        oponentes = oponente.get_equipo()
-        for enemigo in oponentes:
+        for enemigo in oponente:
             if enemigo.get_posicion() == objetivo:
                 enemigo.set_vida_actual(0)
                 muerto = enemigo.get_nombre()
@@ -560,8 +562,7 @@ class Inteligencias(Personaje):
         area = area_2x2(objetivo)
         enemigos = []
         hecho = False
-        oponentes = oponente.get_equipo()
-        for enemigo in oponentes:
+        for enemigo in oponente:
             if enemigo.get_posicion() in area:
                 enemigos.append(enemigo)
                 hecho = True
