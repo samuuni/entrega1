@@ -2,6 +2,7 @@ from utils import limpiar_terminal , validar_celda , validar_celda_contigua
 from jugador import Jugador, Personaje
 
 def main():
+    limpiar_terminal()
     print('Bienvenidos a Tactical Battle. A jugar!\n')
     input('Turno del Jugador 1. Pulsa intro para comenzar')
     j1 = Jugador()
@@ -19,14 +20,28 @@ def main():
         input('Turno del Jugador 1. Pulsa intro para comenzar')
         final = j1.turno()
         if final:
-            print("***** El jugador 1 ha ganado la partida! *****")
+            print('***** El jugador 1 ha ganado la partida! *****\n'
+                  '__          _______ _   _ \n'
+                  '\ \        / /_   _| \ | |\n'
+                  ' \ \  /\  / /  | | |  \| |\n'
+                  '  \ \/  \/ /   | | | . ` |\n'
+                  '   \  /\  /   _| |_| |\  |\n'
+                  '    \/  \/   |_____|_| \_|\n'
+                  )
             return 0
         input('Jugador 1, pulsa intro para terminar tu turno')
         limpiar_terminal()
         input('Turno del Jugador 2. Pulsa intro para comenzar')
         final = j2.turno()
         if final:
-            print("***** El jugador 2 ha ganado la partida! *****")
+            print('***** El jugador 2 ha ganado la partida! *****\n'
+                  '__          _______ _   _ \n'
+                  '\ \        / /_   _| \ | |\n'
+                  ' \ \  /\  / /  | | |  \| |\n'
+                  '  \ \/  \/ /   | | | . ` |\n'
+                  '   \  /\  /   _| |_| |\  |\n'
+                  '    \/  \/   |_____|_| \_|\n'
+                  )
             return 0
         input('Jugador 2, pulsa intro para terminar tu turno')
         limpiar_terminal()

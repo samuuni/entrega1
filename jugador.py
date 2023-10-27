@@ -4,6 +4,11 @@ class Jugador:
 
 
     def turno(self):
+        '''
+        Funcion que, tras confirmar que existe un informe y en caso afirmativo mostrarlo, hace uso de las funciones
+        realizar_accion en un jugador y de la funcion recirbir_accion en su oponente para que lo realizado por el primer
+        jugador le afecte. Finalmente
+        '''
         if self.informe != '':
             print('---- INFORME ----')
             print(self.informe)
@@ -23,7 +28,12 @@ class Jugador:
         else:
             terminado = False
         return terminado
-    def realizar_accion(self): #orden [medico, artillero, francotirador, inteligencia]
+    def realizar_accion(self):
+        '''
+        Funcion que crea un menu con las opciones disponibles dentro de su equipo para que el usuarioa elija y
+        dependiendo de lo que ponga el jugador por teclado comprobara que lo puesto es valido o mostrara en
+        pantalla la razon por la que el valor es invalido para queel usuario pueda introducir otro valor.
+        '''
         equipo_actual = self.get_equipo()
         equipo_restante = []
         equipo_restante.extend(equipo_actual)
@@ -85,6 +95,8 @@ class Jugador:
                                         raise CasillaNoContiguaError
                                     elif mover == 'Invalid':
                                         raise CasillaInvalidaError
+                                    elif mover == 'Igual':
+                                        raise CasillaIgual
                                     else:
                                         raise Exception
                                 except CasillaOcupadaError:
@@ -93,6 +105,8 @@ class Jugador:
                                     print('La casilla no es contigua')
                                 except CasillaInvalidaError:
                                     print('La casilla es invalida')
+                                except CasillaIgual:
+                                    print('Ya estas en esa casilla')
                                 except:
                                     print('Valor invalido')
                         elif cod == 'A':
@@ -100,7 +114,7 @@ class Jugador:
                             while True:
                                 try:
                                     celda = input(
-                                        f'Indica la celda a la que mover al Médico (Posicion actual: {artillero.get_posicion()}): ')
+                                        f'Indica la celda a la que mover al Artillero (Posicion actual: {artillero.get_posicion()}): ')
                                     celda = celda.upper()
                                     mover = artillero.mover(celda)
                                     if mover == 1:
@@ -111,6 +125,8 @@ class Jugador:
                                         raise CasillaNoContiguaError
                                     elif mover == 'Invalid':
                                         raise CasillaInvalidaError
+                                    elif mover == 'Igual':
+                                        raise CasillaIgual
                                     else:
                                         raise Exception
                                 except CasillaOcupadaError:
@@ -119,6 +135,8 @@ class Jugador:
                                     print('La casilla no es contigua')
                                 except CasillaInvalidaError:
                                     print('La casilla es invalida')
+                                except CasillaIgual:
+                                    print('Ya estas en esa casilla')
                                 except:
                                     print('Valor invalido')
                         elif cod == 'F':
@@ -126,7 +144,7 @@ class Jugador:
                             while True:
                                 try:
                                     celda = input(
-                                        f'Indica la celda a la que mover al Médico (Posicion actual: {francotirador.get_posicion()}): ')
+                                        f'Indica la celda a la que mover al Francotirador (Posicion actual: {francotirador.get_posicion()}): ')
                                     celda = celda.upper()
                                     mover = francotirador.mover(celda)
                                     if mover == 1:
@@ -137,6 +155,8 @@ class Jugador:
                                         raise CasillaNoContiguaError
                                     elif mover == 'Invalid':
                                         raise CasillaInvalidaError
+                                    elif mover == 'Igual':
+                                        raise CasillaIgual
                                     else:
                                         raise Exception
                                 except CasillaOcupadaError:
@@ -145,6 +165,8 @@ class Jugador:
                                     print('La casilla no es contigua')
                                 except CasillaInvalidaError:
                                     print('La casilla es invalida')
+                                except CasillaIgual:
+                                    print('Ya estas en esa casilla')
                                 except:
                                     print('Valor invalido')
                         elif cod == 'I':
@@ -152,7 +174,7 @@ class Jugador:
                             while True:
                                 try:
                                     celda = input(
-                                        f'Indica la celda a la que mover al Médico (Posicion actual: {inteligencia.get_posicion()}): ')
+                                        f'Indica la celda a la que mover a la Inteligencia (Posicion actual: {inteligencia.get_posicion()}): ')
                                     celda = celda.upper()
                                     mover = inteligencia.mover(celda)
                                     if mover == 1:
@@ -163,6 +185,8 @@ class Jugador:
                                         raise CasillaNoContiguaError
                                     elif mover == 'Invalid':
                                         raise CasillaInvalidaError
+                                    elif mover == 'Igual':
+                                        raise CasillaIgual
                                     else:
                                         raise Exception
                                 except CasillaOcupadaError:
@@ -171,6 +195,8 @@ class Jugador:
                                     print('La casilla no es contigua')
                                 except CasillaInvalidaError:
                                     print('La casilla es invalida')
+                                except CasillaIgual:
+                                    print('Ya estas en esa casilla')
                                 except:
                                     print('Valor invalido')
                         return None
@@ -189,6 +215,7 @@ class Jugador:
                                                 herido_obj = compañero
                                         habilidad = medico.habilidad(herido_obj)
                                         if habilidad:
+                                            medico.set_enfriamiento(1)
                                             break
                                         else:
                                             raise Exception
@@ -212,7 +239,7 @@ class Jugador:
                                         celda = celda.upper()
                                         valido = validar_celda(celda,columnas(),filas())
                                         if valido:
-
+                                            artillero.set_enfriamiento(1)
                                             break
                                         else:
                                             raise CasillaInvalidaError
@@ -238,6 +265,7 @@ class Jugador:
                                         celda = celda.upper()
                                         valido = validar_celda(celda,columnas(),filas())
                                         if valido:
+                                            francotirador.set_enfriamiento(1)
                                             break
                                         else:
                                             raise CasillaInvalidaError
@@ -263,6 +291,7 @@ class Jugador:
                                         celda = celda.upper()
                                         valido = validar_celda(celda,columnas(),filas())
                                         if valido:
+                                            inteligencia.set_enfriamiento(1)
                                             break
                                         else:
                                             raise CasillaInvalidaError
@@ -288,7 +317,7 @@ class Jugador:
                 print('La habilidad del personaje esta en enfriamiento, seleccione otra opción')
             except:
                 print(f'Opción inválida, seleccione una opción 1-{op_num}')
-    def recibir_accion(self,codigo): #esto despues en turno habra que llamarla como oponente.recibir_accion(codigo)
+    def recibir_accion(self,codigo):
         if codigo:
             equipo = self.get_equipo()
             cod = codigo[0]
@@ -442,17 +471,20 @@ class Jugador:
 
 class Personaje:
     def mover(self, celda):
-        if validar_celda(celda, columnas(),filas()):
-            if validar_celda_contigua(celda,self.get_posicion()):
-                for equipo in self.get_equipo():
-                    if celda == equipo.get_posicion():
-                        return 'Ocupada'
-                self.set_posicion(celda)
-                return 1
+        if self.get_posicion() != celda:
+            if validar_celda(celda, columnas(),filas()):
+                if validar_celda_contigua(celda,self.get_posicion()):
+                    for equipo in self.get_equipo():
+                        if celda == equipo.get_posicion():
+                            return 'Ocupada'
+                    self.set_posicion(celda)
+                    return 1
+                else:
+                    return 'ContiguaError'
             else:
-                return 'ContiguaError'
+                return 'Invalid'
         else:
-            return 'Invalid'
+            return 'Igual'
     def __init__(self):
         self.vida_maxima = int()
         self.vida_actual = int()
@@ -500,7 +532,6 @@ class Medicos(Personaje):
     def habilidad(self,objetivo):
         vida = objetivo.get_vida_max()
         objetivo.set_vida_actual(vida)
-        self.set_enfriamiento(1)
         return True
 class Artilleros(Personaje):
     def __init__(self):
@@ -523,7 +554,6 @@ class Artilleros(Personaje):
                 vida = enemigo.get_vida_actual()
                 enemigo.set_vida_actual(vida-1)
                 hecho = True
-        self.set_enfriamiento(1)
         if hecho:
             return enemigos
         else:
@@ -567,7 +597,6 @@ class Inteligencias(Personaje):
             if enemigo.get_posicion() in area:
                 enemigos.append(enemigo)
                 hecho = True
-        self.set_enfriamiento(1)
         if hecho:
             return enemigos
         else:
@@ -579,6 +608,8 @@ class CasillaInvalidaError(Exception):
 class CasillaOcupadaError(Exception):
     pass
 class CasillaNoContiguaError(Exception):
+    pass
+class CasillaIgual(Exception):
     pass
 class OpcionInvalidadError(Exception):
     pass
