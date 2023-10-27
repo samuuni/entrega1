@@ -5,17 +5,19 @@ class Jugador:
 
     def turno(self):
         if self.informe != '':
-            '---- INFORME ----'
+            print('---- INFORME ----')
             print(self.informe)
         codigo = self.realizar_accion()
         oponente = self.get_oponente()
         resultado = oponente.recibir_accion(codigo)
+
         terminado = False
         if resultado:
             for indx in resultado:
                 if indx == 'resultado':
                     print('---- RESULTADO DE LA ACCIÓN ----')
                     print(resultado[indx])
+                    oponente.set_informe(resultado[indx])
                 if  resultado[indx] == 'Si':
                     terminado = True
         else:
@@ -25,15 +27,13 @@ class Jugador:
         equipo_actual = self.get_equipo()
         equipo_restante = []
         equipo_restante.extend(equipo_actual)
-        nombres = ['Medico','Artillero', 'Francotirador','Inteligencia']
         print('---- SITUACION DEL EQUIPO ----')
-        for personaje in range(len(equipo_actual)): #Aqui hay un index error
-            if equipo_actual[personaje].get_vida_actual() > 0 :
-                print(f'{nombres[personaje]} está en {equipo_actual[personaje].get_posicion()} '
-                      f'[Vida {equipo_actual[personaje].get_vida_actual()}/{equipo_actual[personaje].get_vida_max()}]')
-            elif equipo_actual[personaje].get_vida_actual() == 0:
-                del equipo_restante[personaje]
-                del nombres[personaje]
+        for personaje in equipo_actual: #Aqui hay un index error
+            if personaje.get_vida_actual() > 0 :
+                print(f'{personaje.get_nombre()} está en {personaje.get_posicion()} '
+                      f'[Vida {personaje.get_vida_actual()}/{personaje.get_vida_max()}]')
+            elif personaje.get_vida_actual() == 0:
+                equipo_restante.remove(personaje)
         op_num = 1
         menu = []
 
@@ -289,39 +289,40 @@ class Jugador:
             except:
                 print(f'Opción inválida, seleccione una opción 1-{op_num}')
     def recibir_accion(self,codigo): #esto despues en turno habra que llamarla como oponente.recibir_accion(codigo)
-        equipo = self.get_equipo()
-        cod = codigo[0]
-        celda = codigo[1]+codigo[2]
-        accion = ''
+        if codigo:
+            equipo = self.get_equipo()
+            cod = codigo[0]
+            celda = codigo[1]+codigo[2]
+            accion = ''
 
-        if cod == 'A':
-            artillero = self.get_equipo()[1]
-            habilidad = artillero.habilidad(celda, equipo)
-            if habilidad:
-                for enemigo in habilidad:
-                    accion += f'{enemigo.get_nombre()} ha sido herido en {celda} [Vida restante: {enemigo.get_vida_actual()}]\n'
-        elif cod == 'F':
-            francotirador = self.get_equipo()[2]
-            habilidad = francotirador.habilidad(celda, equipo)
-            if habilidad:
-                accion = f'{habilidad} ha sido eliminado.'
+            if cod == 'A':
+                artillero = self.get_equipo()[1]
+                habilidad = artillero.habilidad(celda, equipo)
+                if habilidad:
+                    for enemigo in habilidad:
+                        accion += f'{enemigo.get_nombre()} ha sido herido en {celda} [Vida restante: {enemigo.get_vida_actual()}]\n'
+            elif cod == 'F':
+                francotirador = self.get_equipo()[2]
+                habilidad = francotirador.habilidad(celda, equipo)
+                if habilidad:
+                    accion = f'{habilidad} ha sido eliminado.'
 
-        elif cod == 'I':
-            inteligencia = self.get_equipo()[3]
-            habilidad = inteligencia.habilidad(celda, equipo)
-            if habilidad:
-                for enemigo in habilidad:
-                    accion += f'{enemigo.get_nombre()} ha sido avistado en {celda}\n'
-        self.set_informe(accion)
-        if accion != '':
-            muertos = 0
-            for aliado in equipo:
-                if aliado.get_vida_actual() == 0:
-                    muertos += 1
-            if muertos == 4:
-                return {'resultado': accion, 'terminar': 'Si'}
-            else:
-                return {'resultado': accion, 'terminar': 'No'}
+            elif cod == 'I':
+                inteligencia = self.get_equipo()[3]
+                habilidad = inteligencia.habilidad(celda, equipo)
+                if habilidad:
+                    for enemigo in habilidad:
+                        accion += f'{enemigo.get_nombre()} ha sido avistado en {enemigo.get_posicion()}\n'
+            self.set_informe(accion)
+            if accion != '':
+                muertos = 0
+                for aliado in equipo:
+                    if aliado.get_vida_actual() == 0:
+                        muertos += 1
+                if muertos == 4:
+                    return {'resultado': accion, 'terminar': 'Si'}
+                else:
+                    return {'resultado': accion, 'terminar': 'No'}
         else:
             return None
     def crear_equipo(self,personaje,celda):
