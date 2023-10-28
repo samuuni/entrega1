@@ -57,3 +57,34 @@ def columnas(): #esto es para si hay que cambiar la cantidad de filas o columnas
 def filas():
     fil = 4
     return fil
+
+'''
+
+Ok en esta si te puse un par de cambios que yo haria personalemente:
+
+La función validar_celda:
+
+Podrias simplificarla usando directamente la longitud de la cadena para verificar la longitud de la celda: 
+if len(celda) != 2:.
+En lugar de crear una variable verif, puede devolver el resultado directamente: 
+return celda[0] in columnas_max and 0 < int(celda[1]) <= max_row.
+
+para esta
+
+def comprobar_celda_disponible(celda, equipo):
+    if celda not in equipo:
+        return True
+    else:
+        return False
+ Podría simplificarse eliminando el uso de if y directamente devolviendo la expresión booleana: 
+ return celda not in equipo.
+ 
+La función area_2x2 creo entender que calcula 2x2 alrededor de un objetivo.
+Podrias hacerla mas clara y simplificarla En lugar de realizar múltiples comprobaciones, podrias hacerlo de manera mas concisa para hacer area mas eficiente.
+Puede usar un bucle para generar las celdas en lugar de escribirlas explícitamente. Esto haría que la función sea más escalable si se necesita un área más grande en el futuro (no se si lo necesitarias pero bueno, again buena practica).
+
+para columnas y filas
+Lo que hiciste esta bien para el futuro, lo que pasa es que en general si puedes evitar usar constantes mejor, si estas 100% seguro que no las vas a cambiar evitalas, si no la constante esta bien.
+
+En general buen trabajo amigo, solo falta pulir un poco pero todo bastante bien.
+'''

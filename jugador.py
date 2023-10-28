@@ -624,3 +624,26 @@ class OpcionInvalidadError(Exception):
     pass
 class HabilidadEnfriamientoError(Exception):
     pass
+
+
+'''
+Okaaay esto tomo tiempo haha, bueno te comento lo que pienso, tu codigo esta bien funciona y esta bien estructurado, como sugerencias para optimizarlo
+
+Comentarios y Documentación: Añade comentarios explicativos para las funciones y métodos más complejos. Tambien, podrias poner documentación detallada sobre las clases y sus métodos usando el formato de docstrings de Python (aunque esto es mas opcional).
+
+Nombres de variables y métodos descriptivos: Aunque la mayoría de tus nombres de variables y métodos son descriptivos, algunos pueden mejorarse aún más para hacer que el código sea más legible. Por ejemplo, en lugar de "cod", podrías usar "codigo_accion" para tener mayor claridad. Esto también se aplica a las variables en la función realizar_accion y otros lugares del codigo.
+
+Manejo de errores mejorado: En lugar de manejar los errores con un bloque except genérico, podrías manejar errores específicos en diferentes secciones de tu código. Seria para facilitar la depuración y el mantenimiento. Además, podiras agregar más mensajes de error descriptivos para guiar a tu profe si llega a haber problemas (esto es sobretodo si hicieses un producto para otros devs pero en todo caso es buena practica).
+
+Evitar la duplicación de código: Hay varias partes de código que son bastante similares como me dijiste, como las secciones que manejan el movimiento de diferentes personajes. Podrías considerar crear una función común para manejar esto y reutilizarla para cada personaje en lugar de repetir el código. (Me dijisite que no te ponga la respuesta a si que no lo haré pero si no sabes me dices)
+
+Eliminación de código inalcanzable: Hay partes de tu código que parecen estar inalcanzables. Por ejemplo, en el método recibir_accion, la sección return None al final de la función no se ejecutará nunca. Relée tu codigo para eliminar cualquier código inalcanzable o innecesario.
+
+Uso de las capacidades de las clases: Me imagino que sabras pero en Python, puedes usar la herencia y las características de las clases de manera más efectiva. Por ejemplo, los métodos set_vida_actual, set_posicion, set_enfriamiento, y otros podrían definirse en la clase base Personaje en lugar de ser repetidos en cada clase de personaje. Esto evitaría la duplicación de código. (esto te ahorraria bastantes lineas y lo haria mucho mas lisible)
+
+Nombres de clases en singular: Esto es algo nitpicky, pero normalmente los nombres de las clases deben estar en singular. Puedes cambiar Medicos a Medico, Artilleros a Artillero, y así sucesivamente.
+
+Separación de funciones: Algunas de tus funciones son bastante largas y realizan múltiples tareas. Trata de dividirlas en funciones más pequeñas que realicen tareas específicas. Es para que sea mas facil de leer y de cambiar en el futuro, recuerda que programar es 20% encontrar la solucion, y 80% optimizarla, esa es la mayor diferencia entre Senior Devs y junior devs.
+
+Sigue siendo un buen trabajo compa, comparado al ultimo trabajo tuyo que vi (si no me acuerdo mal era algo con Arduino sobre un garaje) has mejorado mucho, sigue asi crack.
+'''
