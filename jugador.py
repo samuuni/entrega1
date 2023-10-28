@@ -38,11 +38,12 @@ class Jugador:
         equipo_restante = []
         equipo_restante.extend(equipo_actual)
         print('---- SITUACION DEL EQUIPO ----')
-        for personaje in equipo_actual: #Aqui hay un index error
+        for personaje in equipo_actual:
             if personaje.get_vida_actual() > 0 :
                 print(f'{personaje.get_nombre()} está en {personaje.get_posicion()} '
                       f'[Vida {personaje.get_vida_actual()}/{personaje.get_vida_max()}]')
-            elif personaje.get_vida_actual() == 0:
+            elif personaje.get_vida_actual() <= 0:
+                personaje.set_posicion('')
                 equipo_restante.remove(personaje)
         op_num = 1
         menu = []
@@ -88,6 +89,8 @@ class Jugador:
                                     celda = celda.upper()
                                     mover = medico.mover(celda)
                                     if mover == 1:
+                                        for aliado in equipo_restante:
+                                            aliado.set_enfriamiento(0)
                                         break
                                     elif mover == 'Ocupada':
                                         raise CasillaOcupadaError
@@ -118,6 +121,8 @@ class Jugador:
                                     celda = celda.upper()
                                     mover = artillero.mover(celda)
                                     if mover == 1:
+                                        for aliado in equipo_restante:
+                                            aliado.set_enfriamiento(0)
                                         break
                                     elif mover == 'Ocupada':
                                         raise CasillaOcupadaError
@@ -148,6 +153,8 @@ class Jugador:
                                     celda = celda.upper()
                                     mover = francotirador.mover(celda)
                                     if mover == 1:
+                                        for aliado in equipo_restante:
+                                            aliado.set_enfriamiento(0)
                                         break
                                     elif mover == 'Ocupada':
                                         raise CasillaOcupadaError
@@ -178,6 +185,8 @@ class Jugador:
                                     celda = celda.upper()
                                     mover = inteligencia.mover(celda)
                                     if mover == 1:
+                                        for aliado in equipo_restante:
+                                            aliado.set_enfriamiento(0)
                                         break
                                     elif mover == 'Ocupada':
                                         raise CasillaOcupadaError
@@ -329,7 +338,7 @@ class Jugador:
                 habilidad = artillero.habilidad(celda, equipo)
                 if habilidad:
                     for enemigo in habilidad:
-                        accion += f'{enemigo.get_nombre()} ha sido herido en {celda} [Vida restante: {enemigo.get_vida_actual()}]\n'
+                        accion += f'{enemigo.get_nombre()} ha sido herido en {enemigo.get_posicion()} [Vida restante: {enemigo.get_vida_actual()}]\n'
             elif cod == 'F':
                 francotirador = self.get_equipo()[2]
                 habilidad = francotirador.habilidad(celda, equipo)

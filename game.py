@@ -1,5 +1,5 @@
-from utils import limpiar_terminal , validar_celda , validar_celda_contigua
-from jugador import Jugador, Personaje
+from utils import limpiar_terminal
+from jugador import Jugador
 
 def main():
     limpiar_terminal()
